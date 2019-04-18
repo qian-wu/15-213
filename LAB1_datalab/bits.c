@@ -172,7 +172,10 @@ NOTES:
  *   Rating: 1
  */
 int thirdBits(void) {
-  return 2;
+  int x = 0x49;
+  x = x | x << 9;
+  x = x | x << 18;
+  return x;
 }
 /*
  * isTmin - returns 1 if x is the minimum, two's complement number,
@@ -182,7 +185,7 @@ int thirdBits(void) {
  *   Rating: 1
  */
 int isTmin(int x) {
-  return 2;
+  return !((x + x) | !x);
 }
 //2
 /* 
@@ -193,7 +196,7 @@ int isTmin(int x) {
  *   Rating: 2
  */
 int isNotEqual(int x, int y) {
-  return 2;
+  return !!(x ^ y);
 }
 /* 
  * anyOddBit - return 1 if any odd-numbered bit in word set to 1
@@ -203,7 +206,12 @@ int isNotEqual(int x, int y) {
  *   Rating: 2
  */
 int anyOddBit(int x) {
-    return 2;
+  x = x | (x >> 16); 
+  x = x | (x >> 8); 
+  x = x | (x >> 4); 
+  x = x | (x >> 2);
+  // printf("%x \n", x); 
+  return (x >> 1) & 0x1;
 }
 /* 
  * negate - return -x 
@@ -213,7 +221,7 @@ int anyOddBit(int x) {
  *   Rating: 2
  */
 int negate(int x) {
-  return 2;
+  return ~x + 1;
 }
 //3
 /* 
@@ -315,3 +323,8 @@ unsigned float_i2f(int x) {
 int float_f2i(unsigned uf) {
   return 2;
 }
+
+// int main() {
+//   printf("%d", anyOddBit(0x7ffffffff));
+//   return -1;
+// }
