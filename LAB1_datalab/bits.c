@@ -232,7 +232,14 @@ int negate(int x) {
  *   Rating: 3
  */
 int conditional(int x, int y, int z) {
-  return 2;
+  int i = !x;
+  i = i | i << 1;
+  i = i | i << 2;
+  i = i | i << 4;
+  i = i | i << 8;
+  i = i | i << 16;
+  // printf("%x %x\n", ((!x) - 1) & y, i & z);
+  return (~i & y) | (i & z);
 }
 /* 
  * subOK - Determine if can compute x-y without overflow
@@ -325,6 +332,6 @@ int float_f2i(unsigned uf) {
 }
 
 // int main() {
-//   printf("%d", anyOddBit(0x7ffffffff));
+//   printf("%x \n", conditional(0, 5, 6));
 //   return -1;
 // }
