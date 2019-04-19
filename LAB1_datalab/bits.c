@@ -250,7 +250,15 @@ int conditional(int x, int y, int z) {
  *   Rating: 3
  */
 int subOK(int x, int y) {
-  return 2;
+  int i = 1 << 31;
+  int z = x + (~y + 1);
+
+  x = x & i;
+  y = y & i;
+  z = z & i;
+  
+  // printf("%x %x %x %x\n", i, x, y, z);
+  return !((x ^ y) & (x ^ z));
 }
 /* 
  * isGreater - if x > y  then return 1, else return 0 
@@ -260,18 +268,27 @@ int subOK(int x, int y) {
  *   Rating: 3
  */
 int isGreater(int x, int y) {
-  return 2;
+  int i = 1 << 31;
+  int z = !((x & i) ^ (y & i)); //if same sign 1 else 0
+  int j = ((y + (~x + 1)) >> 31) & 0x1; // sign of x - y
+  y = (y >> 31) & 0x1;
+  return (z & j) | ((!z) & y);
 }
 //4
 /*
  * bitParity - returns 1 if x contains an odd number of 0's
  *   Examples: bitParity(5) = 0, bitParity(7) = 1
  *   Legal ops: ! ~ & ^ | + << >>
- *   Max ops: 20
+*   Max ops: 20
  *   Rating: 4
  */
 int bitParity(int x) {
-  return 2;
+  x = x ^ (x >> 1);
+  x = x ^ (x >> 2);
+  x = x ^ (x >> 4);
+  x = x ^ (x >> 8);
+  x = x ^ (x >> 16);
+  return x & 0x1;
 }
 /* howManyBits - return the minimum number of bits required to represent x in
  *             two's complement
@@ -332,6 +349,6 @@ int float_f2i(unsigned uf) {
 }
 
 // int main() {
-//   printf("%x \n", conditional(0, 5, 6));
+//   printf("%x %x\n", isGreater(0x7fffffff,0x7fffffff), isGreater(5,4));
 //   return -1;
 // }
