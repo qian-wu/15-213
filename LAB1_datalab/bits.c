@@ -303,8 +303,49 @@ int bitParity(int x) {
  *  Rating: 4
  */
 int howManyBits(int x) {
-  return 0;
+  int sign = (x & (1 << 31)) >> 31;
+  int y = 0;
+  int z = 0;
+  int i = 0x55;
+  int j = 0x33;
+  int k = 0x0f;
+
+  i = i | i << 8;
+  i = i | i << 16;
+
+  j = j | j << 8;
+  j = j | j << 16;
+
+  k = k | k << 8;
+  k = k | k << 16;
+  //make x be positive
+  // printf("x : %x ", x);
+  x = ((~sign) & x) | (sign & (~x));
+  //make after first 1 is all 1's
+  x = x | (x >> 1);
+  x = x | (x >> 2);
+  x = x | (x >> 4);
+  x = x | (x >> 8);
+  x = x | (x >> 16);
+  // printf("after trans: %x \n", x);
+  //count number  1s of x
+  x = ((x >> 1) & i) + (x & i);
+  x = ((x >> 2) & j) + (x & j);
+  x = ((x >> 4) & k) + (x & k);
+  x = (x >> 8) + x;
+  x = (x >> 16) + x;
+  x = x & 0x3f;
+
+  //condition on x == (only 1s) ? x : x + 1
+  y = !(x ^ 0x20);
+  y = y | y << 1;
+  y = y | y << 2;
+  y = y | y << 4;
+  z = (y & x) | ((~y) & (x + 1));
+  // printf("%x %d %x %d ", x, x, y, z);
+  return z;
 }
+
 //float
 /* 
  * float_half - Return bit-level equivalent of expression 0.5*f for
@@ -345,10 +386,10 @@ unsigned float_i2f(int x) {
  *   Rating: 4
  */
 int float_f2i(unsigned uf) {
-  return 2;
+  return 2; 
 }
 
 // int main() {
-//   printf("%x %x\n", isGreater(0x7fffffff,0x7fffffff), isGreater(5,4));
+//   printf("%d %d %d %d\n", howManyBits(1), howManyBits(-1), howManyBits(0x7fffffff), howManyBits(0x80000000));
 //   return -1;
 // }
