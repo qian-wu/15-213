@@ -12,6 +12,14 @@
 
 int is_transpose(int M, int N, int A[N][M], int B[M][N]);
 
+void printMatrix(int M, int N, int A[M][N]) {
+    for (int i = 0; i < M; i++) {
+        for (int j = 0; j < N; j++) {
+            printf("%d ", A[i][j]);
+        }
+        printf("\n");
+    }
+}
 /* 
  * transpose_submit - This is the solution transpose function that you
  *     will be graded on for Part B of the assignment. Do not change
@@ -21,7 +29,23 @@ int is_transpose(int M, int N, int A[N][M], int B[M][N]);
  */
 char transpose_submit_desc[] = "Transpose submission";
 void transpose_submit(int M, int N, int A[N][M], int B[M][N])
-{
+{   
+    int size = 4;
+    // if (M == 64) {
+    //     size = 4;
+    // }
+    printf("size = %d", size);
+    for (int i = 0; i < N; i += size) {
+        for (int j = 0; j < M; j += size) {
+            for (int k = i; (k < (i + size)) & (k < N); k++) {
+                for (int l = j; (l < (j + size)) & (l < M); l++) {
+                    // printf("%d%d ", k, l);
+                    B[l][k] = A[k][l];
+                }
+                // printf("\n");
+            }
+        }
+    }
 }
 
 /* 
@@ -81,4 +105,3 @@ int is_transpose(int M, int N, int A[N][M], int B[M][N])
     }
     return 1;
 }
-
